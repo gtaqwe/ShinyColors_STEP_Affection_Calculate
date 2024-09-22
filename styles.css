@@ -15,6 +15,11 @@ input[type="number"] {
   min-width: 160px;
 }
 
+.addInput {
+  margin: 0px 10px;
+  min-width: 100px;
+}
+
 footer {
   text-align: center;
   font-size: 10px;

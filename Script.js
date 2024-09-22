@@ -1,3 +1,7 @@
+const ADDED_EX_INPUT_LIMIT = 3;
+const ADDED_ITEM_INPUT_LIMIT = 2;
+const ADDED_EXPECTED_INPUT_LIMIT = 10;
+
 var exSkillAffection;
 var item1Affection;
 var item2Affection;
@@ -94,6 +98,110 @@ function init() {
   mainInputUpdate();
 }
 
+/**
+ * EX스킬 입력란 추가 / 삭제
+ */
+$("#addExSkillInput").click(function () {
+  $("#exSkillInputDiv").append(`
+    <div class="addedExSkillAffection">
+    <input
+      type="number"
+      name="exSkillAffection"
+      min="0"
+      max="100"
+      value="0"
+      step="1"
+      onchange="mainInputUpdate()"
+    />
+    <button class="removeAddedExSkillInput">삭제</button>
+
+    </div>
+`);
+
+  const count = $(`input[name="exSkillAffection"]`).length;
+  switchButtonDisable("addExSkillInput", count >= ADDED_EX_INPUT_LIMIT);
+
+  $(`.removeAddedExSkillInput`).click(function () {
+    $(this).parent(".addedExSkillAffection").remove();
+    mainInputUpdate();
+
+    const count = $(`input[name="exSkillAffection"]`).length;
+    switchButtonDisable("addExSkillInput", count >= ADDED_EX_INPUT_LIMIT);
+  });
+});
+
+/**
+ * 아이템 입력란 추가 / 삭제
+ */
+$("#addItemInput").click(function () {
+  $("#itemInputDiv").append(`
+    <div class="addedItemAffection">
+    <input
+      type="number"
+      name="itemAffection"
+      min="0"
+      max="100"
+      value="0"
+      step="1"
+      onchange="mainInputUpdate()"
+    />
+    <button class="removeAddedItemInput">삭제</button>
+
+    </div>
+`);
+
+  const count = $(`input[name="itemAffection"]`).length;
+  switchButtonDisable("addItemInput", count >= ADDED_ITEM_INPUT_LIMIT);
+
+  $(`.removeAddedItemInput`).click(function () {
+    $(this).parent(".addedItemAffection").remove();
+    mainInputUpdate();
+
+    const count = $(`input[name="itemAffection"]`).length;
+    switchButtonDisable("addItemInput", count >= ADDED_ITEM_INPUT_LIMIT);
+  });
+});
+
+/**
+ * 취득 예정 친애도 추가 / 삭제
+ */
+$("#addExpectedInput").click(function () {
+  $("#expectedInputDiv").append(`
+    <div class="addedExpectedAffection">
+    <input
+      type="number"
+      name="expectedAffection"
+      min="0"
+      max="100"
+      value="0"
+      step="1"
+      onchange="mainInputUpdate()"
+    />
+    <button class="removeAddedExpectedInput">삭제</button>
+
+    </div>
+`);
+
+  const count = $(`input[name="expectedAffection"]`).length;
+  switchButtonDisable("addExpectedInput", count >= ADDED_EXPECTED_INPUT_LIMIT);
+
+  $(`.removeAddedExpectedInput`).click(function () {
+    $(this).parent(".addedExpectedAffection").remove();
+    mainInputUpdate();
+
+    const count = $(`input[name="expectedAffection"]`).length;
+    switchButtonDisable("addExpectedInput", count >= ADDED_EXPECTED_INPUT_LIMIT);
+  });
+});
+
+function switchButtonDisable(id, condition) {
+  if (condition) {
+    $(`#${id}`).attr("disabled", true);
+  } else {
+    $(`#${id}`).attr("disabled", false);
+  }
+}
+
 function createLiveCheckbox() {
   $("#seasonAffection").empty();
 
@@ -184,31 +292,49 @@ function createLiveCheckbox() {
 
 function mainInputUpdate() {
   initNumVal();
-
   applyCalculatedAffectionNum();
 }
 
 function initNumVal() {
-  exSkillAffection = setInitAffectionNum("#exSkillAffection");
-  item1Affection = setInitAffectionNum("#item1Affection");
-  item2Affection = setInitAffectionNum("#item2Affection");
-  nowAffection = setInitAffectionNum("#nowAffection");
-  expectedAffectionNum = setInitAffectionNum("#expectedAffectionNum");
+  exSkillAffection = setInitAffectionNumByName("exSkillAffection");
+  itemAffection = setInitAffectionNumByName("itemAffection");
+  nowAffection = setInitAffectionNumByName("nowAffection");
+  expectedAffectionNum = setInitAffectionNumByName("expectedAffection");
 }
 
-function setInitAffectionNum(id) {
+function setInitAffectionNumById(id) {
   value = chkNumRange($(id).val(), $(id).attr("min"), $(id).attr("max"));
   $(id).val(value);
 
   return value;
 }
 
+function setInitAffectionNumByName(name) {
+  let totalValue = 0;
+  const inputFields = $(`input[name="${name}"]`);
+
+  for (let i = 0; i < inputFields.length; i++) {
+    inputFields
+      .eq(i)
+      .val(
+        chkNumRange(
+          inputFields.eq(i).val(),
+          inputFields.eq(i).attr("min"),
+          inputFields.eq(i).attr("max")
+        )
+      );
+    totalValue += Number(inputFields.eq(i).val());
+  }
+
+  return totalValue;
+}
+
 function chkNumRange(value, minVal = 0, maxVal = 100) {
   const min = minVal ? Number(minVal) : 0;
   const max = maxVal ? Number(maxVal) : 100;
 
-  var num;
-  var target;
+  let num;
+  let target;
   // 입력 데이터가 숫자가 아닐시 최소값으로 변경
   if (isNaN(value)) {
     num = min;
@@ -230,9 +356,11 @@ function chkNumRange(value, minVal = 0, maxVal = 100) {
 }
 
 function applyCalculatedAffectionNum() {
-  const prepareAffection = chkNumRange(exSkillAffection + item1Affection + item2Affection);
+  const prepareAffection = chkNumRange(exSkillAffection + itemAffection);
 
   $("#prepareAffectionResult").text(prepareAffection);
+
+  $("#displayPrepareAffectionResult").text(displayAffection(prepareAffection));
 
   $("#nowAffectionResult").text(`현재 친애도 (${displayAffection(nowAffection)})`);
 
@@ -241,16 +369,16 @@ function applyCalculatedAffectionNum() {
   );
   $("#finalAffectionResult").text(finalAffectionResult);
 
-  $("#displayAffectionResult").text(displayAffection(finalAffectionResult));
+  $("#displayFinalAffectionResult").text(displayAffection(finalAffectionResult));
 }
 
 function totalLiveAffection() {
-  var totalLiveAffectionNum = 0;
-  var addFansBonus = $(`input[name="liveAffection"]`);
+  let totalLiveAffectionNum = 0;
+  const inputFields = $(`input[name="liveAffection"]`);
 
-  for (var i = 0; i < addFansBonus.length; i++) {
-    if (addFansBonus.eq(i).is(":checked") == true) {
-      totalLiveAffectionNum += Number(addFansBonus.eq(i).val());
+  for (let i = 0; i < inputFields.length; i++) {
+    if (inputFields.eq(i).is(":checked") == true) {
+      totalLiveAffectionNum += Number(inputFields.eq(i).val());
     }
   }
 
@@ -261,15 +389,15 @@ function totalLiveAffection() {
  * 친애도 표시
  */
 function displayAffection(affectionNum) {
-  var affectionLvValList = [1, 25, 50, 75, 100];
-  var affectionDetailLv;
-  var affectionDetailNext;
-  var affectionDetailStr;
+  let affectionLvValList = [1, 25, 50, 75, 100];
+  let affectionDetailLv;
+  let affectionDetailNext;
+  let affectionDetailStr;
 
   if (affectionNum >= 100) {
     affectionDetailStr = "Lv : Max";
   } else {
-    for (var i = affectionLvValList.length - 1; i >= 0; i--) {
+    for (let i = affectionLvValList.length - 1; i >= 0; i--) {
       if (affectionNum < affectionLvValList[i]) {
         affectionDetailLv = i;
         affectionDetailNext = affectionLvValList[affectionDetailLv] - affectionNum;
