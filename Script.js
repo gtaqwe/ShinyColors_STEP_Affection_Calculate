@@ -89,9 +89,9 @@ function init() {
     $("#ProducingAffectionSummary").text("프로듀스 중 (펼치기)");
   }
 
-  mainInputUpdate();
   createSeasonLiveList();
   createLiveCheckbox();
+  mainInputUpdate();
 }
 
 function createLiveCheckbox() {
@@ -233,6 +233,8 @@ function applyCalculatedAffectionNum() {
   const prepareAffection = chkNumRange(exSkillAffection + item1Affection + item2Affection);
 
   $("#prepareAffectionResult").text(prepareAffection);
+
+  $("#nowAffectionResult").text(`현재 친애도 (${displayAffection(nowAffection)})`);
 
   const finalAffectionResult = chkNumRange(
     nowAffection + expectedAffectionNum + totalLiveAffection()
