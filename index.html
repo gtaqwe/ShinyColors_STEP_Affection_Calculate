@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>친애도 계산기</title>
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <details id="prepareProduceAffectionDetails" close>
+      <summary
+        id="prepareProduceAffectionSummary"
+        style="cursor: pointer; font-weight: bold; font-size: x-large"
+      ></summary>
+      <fieldset>
+        <legend><h3>프로듀스 준비</h3></legend>
+        <div class="inputItems">
+          <h3>EX스킬 총합</h3>
+          <div>
+            <input
+              type="number"
+              id="exSkillAffection"
+              min="0"
+              max="100"
+              value="0"
+              step="1"
+              onchange="mainInputUpdate()"
+            />
+          </div>
+        </div>
+
+        <br />
+
+        <div class="inputItems">
+          <h3>아이템</h3>
+          <div>
+            <input
+              type="number"
+              id="item1Affection"
+              min="0"
+              max="100"
+              value="0"
+              step="1"
+              onchange="mainInputUpdate()"
+            />
+            <input
+              type="number"
+              id="item2Affection"
+              min="0"
+              max="100"
+              value="0"
+              step="1"
+              onchange="mainInputUpdate()"
+            />
+          </div>
+        </div>
+
+        <br />
+
+        <div>
+          <fieldset>
+            <legend><h3>시작시 친애도</h3></legend>
+            <h2><div id="prepareAffectionResult"></div></h2>
+          </fieldset>
+        </div>
+      </fieldset>
+    </details>
+
+    <details id="ProducingAffectionDetails" open>
+      <summary
+        id="ProducingAffectionSummary"
+        style="cursor: pointer; font-weight: bold; font-size: x-large"
+      ></summary>
+      <fieldset>
+        <legend><h3>프로듀스 중</h3></legend>
+        <div class="inputItems">
+          <h3>현재 친애도</h3>
+          <div>
+            <input
+              type="number"
+              id="nowAffection"
+              min="0"
+              max="100"
+              value="0"
+              step="1"
+              onchange="mainInputUpdate()"
+            />
+          </div>
+        </div>
+
+        <br />
+
+        <div class="inputItems">
+          <h3>취득 예정 친애도</h3>
+          <div>
+            <input
+              type="number"
+              id="expectedAffectionNum"
+              min="0"
+              max="100"
+              value="0"
+              step="1"
+              onchange="mainInputUpdate()"
+            />
+          </div>
+        </div>
+
+        <br />
+
+        <div class="inputItems">
+          <h3>시즌별 취득 가능 친애도</h3>
+          <div id="seasonAffection"></div>
+        </div>
+
+        <br />
+
+        <fieldset>
+          <legend><h3>최종 친애도</h3></legend>
+          <div>
+            <h2><div id="finalAffectionResult"></div></h2>
+            <h2><div id="displayAffectionResult"></div></h2>
+          </div>
+        </fieldset>
+      </fieldset>
+    </details>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="Script.js"></script>
+  </body>
+  <footer>
+    <hr />
+    <div>Made by ZEED</div>
+  </footer>
+</html>
