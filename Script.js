@@ -20,7 +20,8 @@ class AddAffection {
 
 function createSeasonLiveList() {
   // 시즌 1
-  season1LiveList.push(new AddAffection(4, "엔트리 라이브 (エントリーライブ)", undefined));
+  season1LiveList.push(new AddAffection(5, "엔트리 라이브 (エントリーライブ)", undefined));
+  season1LiveList.push(new AddAffection(4, "시즌1 목표 달성", undefined));
 
   // 시즌 2
   season2LiveList.push(new AddAffection(1, "Rhythmic Diva", 1));
